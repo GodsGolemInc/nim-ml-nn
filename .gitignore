@@ -1,0 +1,26 @@
+# Nim build artifacts
+nimcache/
+*.o
+*.a
+*.obj
+*.dylib
+*.dll
+*.so
+
+# Test binaries
+tests/test_*
+!tests/*.nim
+
+# IDE and editor
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS generated
+.DS_Store
+Thumbs.db
+
+# Nim libraries
+nimble.lock
