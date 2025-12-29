@@ -9,7 +9,7 @@ srcDir        = "src"
 # Dependencies
 
 requires "nim >= 2.0.0"
-requires "nimml_core >= 0.0.4"
+requires "ml_core >= 0.0.4"
 
 # Tasks
 task test, "Run tests":

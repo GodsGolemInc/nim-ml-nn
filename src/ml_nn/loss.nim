@@ -3,7 +3,7 @@
 ## Loss functions for training neural networks.
 
 import std/[options, strformat]
-import nimml_core
+import ml_core
 import ./module
 
 type

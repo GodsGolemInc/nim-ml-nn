@@ -8,12 +8,12 @@
 ## v0.0.4: Loss functions
 ## v0.0.5: Optimizers and LR schedulers
 
-import nimml_nn/module
-import nimml_nn/layers/dense
-import nimml_nn/layers/activation
-import nimml_nn/layers/dropout
-import nimml_nn/loss
-import nimml_nn/optim
+import ml_nn/module
+import ml_nn/layers/dense
+import ml_nn/layers/activation
+import ml_nn/layers/dropout
+import ml_nn/loss
+import ml_nn/optim
 
 export module
 export dense

@@ -4,7 +4,7 @@
 ## Provides parameter management and hierarchical structure.
 
 import std/[tables, options, strutils, hashes]
-import nimml_core
+import ml_core
 
 type
   ModuleError* = object of CatchableError

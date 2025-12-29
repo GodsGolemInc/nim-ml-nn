@@ -2,9 +2,9 @@
 
 import unittest
 import std/[options, strutils, tables]
-import nimml_core
-import ../src/nimml_nn/module
-import ../src/nimml_nn/optim
+import ml_core
+import ../src/ml_nn/module
+import ../src/ml_nn/optim
 
 # Helper to create test parameters
 proc createTestParams(): seq[Parameter] =

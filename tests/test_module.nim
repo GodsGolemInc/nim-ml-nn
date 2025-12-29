@@ -2,8 +2,8 @@
 
 import unittest
 import std/[options, tables, strutils]
-import nimml_core
-import ../src/nimml_nn/module
+import ml_core
+import ../src/ml_nn/module
 
 # Simple test module
 type

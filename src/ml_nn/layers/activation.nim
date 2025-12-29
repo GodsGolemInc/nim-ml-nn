@@ -3,7 +3,7 @@
 ## Non-linear activation functions for neural networks.
 
 import std/[strformat]
-import nimml_core
+import ml_core
 import ../module
 
 type

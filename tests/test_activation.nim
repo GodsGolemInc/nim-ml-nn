@@ -2,9 +2,9 @@
 
 import unittest
 import std/[strutils]
-import nimml_core
-import ../src/nimml_nn/module
-import ../src/nimml_nn/layers/activation
+import ml_core
+import ../src/ml_nn/module
+import ../src/ml_nn/layers/activation
 
 suite "ReLU":
   test "create relu":

@@ -2,9 +2,9 @@
 
 import unittest
 import std/[strutils]
-import nimml_core
-import ../src/nimml_nn/module
-import ../src/nimml_nn/layers/dropout
+import ml_core
+import ../src/ml_nn/module
+import ../src/ml_nn/layers/dropout
 
 suite "Dropout":
   test "create dropout":

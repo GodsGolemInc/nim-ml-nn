@@ -2,9 +2,9 @@
 
 import unittest
 import std/[options, strutils]
-import nimml_core
-import ../src/nimml_nn/module
-import ../src/nimml_nn/loss
+import ml_core
+import ../src/ml_nn/module
+import ../src/ml_nn/loss
 
 suite "CrossEntropyLoss":
   test "create cross entropy loss":

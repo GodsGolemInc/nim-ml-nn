@@ -3,7 +3,7 @@
 ## Optimization algorithms for training neural networks.
 
 import std/[options, tables, hashes, math, strformat]
-import nimml_core
+import ml_core
 import ./module
 
 type
