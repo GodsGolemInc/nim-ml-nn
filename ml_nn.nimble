@@ -1,6 +1,6 @@
 # Package
 
-version       = "0.0.9"
+version       = "0.1.0"
 author        = "jasagiri"
 description   = "Neural network layers, loss functions, and optimizers"
 license       = "Apache-2.0"
@@ -9,7 +9,7 @@ srcDir        = "src"
 # Dependencies
 
 requires "nim >= 2.0.0"
-requires "ml_core >= 0.0.4"
+requires "ml_core >= 0.0.6"
 
 # Tasks
 task test, "Run tests":

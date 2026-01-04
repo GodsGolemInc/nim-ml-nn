@@ -6,6 +6,7 @@
 import std/[options, strformat]
 import ml_core
 import ../module
+import ../compute
 
 type
   # =============================================================================
@@ -183,14 +184,7 @@ method forward*(pool: MaxPool1d, inputs: varargs[TensorRef]): TensorRef =
     raise newException(ModuleError,
       fmt"MaxPool1d expects 3D input (N,C,L), got {dims.len}D")
 
-  let batchSize = dims[0]
-  let channels = dims[1]
-  let inputLen = dims[2]
-
-  let outLen = calcPoolOutputSize(inputLen, pool.kernelSize, pool.stride,
-                                   pool.padding, pool.dilation, pool.ceilMode)
-
-  newTensorRef(newShape(batchSize, channels, outLen), input.dtype)
+  computeMaxPool1d(input, pool.kernelSize, pool.stride, pool.padding, pool.dilation)
 
 # =============================================================================
 # AvgPool1d Implementation
@@ -282,17 +276,10 @@ method forward*(pool: MaxPool2d, inputs: varargs[TensorRef]): TensorRef =
     raise newException(ModuleError,
       fmt"MaxPool2d expects 4D input (N,C,H,W), got {dims.len}D")
 
-  let batchSize = dims[0]
-  let channels = dims[1]
-  let inH = dims[2]
-  let inW = dims[3]
-
-  let outH = calcPoolOutputSize(inH, pool.kernelSize.h, pool.stride.h,
-                                 pool.padding.h, pool.dilation.h, pool.ceilMode)
-  let outW = calcPoolOutputSize(inW, pool.kernelSize.w, pool.stride.w,
-                                 pool.padding.w, pool.dilation.w, pool.ceilMode)
-
-  newTensorRef(newShape(batchSize, channels, outH, outW), input.dtype)
+  computeMaxPool2d(input, pool.kernelSize.h, pool.kernelSize.w,
+                   pool.stride.h, pool.stride.w,
+                   pool.padding.h, pool.padding.w,
+                   pool.dilation.h, pool.dilation.w)
 
 # =============================================================================
 # AvgPool2d Implementation
@@ -341,17 +328,10 @@ method forward*(pool: AvgPool2d, inputs: varargs[TensorRef]): TensorRef =
     raise newException(ModuleError,
       fmt"AvgPool2d expects 4D input (N,C,H,W), got {dims.len}D")
 
-  let batchSize = dims[0]
-  let channels = dims[1]
-  let inH = dims[2]
-  let inW = dims[3]
-
-  let outH = calcPoolOutputSize(inH, pool.kernelSize.h, pool.stride.h,
-                                 pool.padding.h, 1, pool.ceilMode)
-  let outW = calcPoolOutputSize(inW, pool.kernelSize.w, pool.stride.w,
-                                 pool.padding.w, 1, pool.ceilMode)
-
-  newTensorRef(newShape(batchSize, channels, outH, outW), input.dtype)
+  computeAvgPool2d(input, pool.kernelSize.h, pool.kernelSize.w,
+                   pool.stride.h, pool.stride.w,
+                   pool.padding.h, pool.padding.w,
+                   pool.countIncludePad)
 
 # =============================================================================
 # MaxPool3d Implementation
@@ -513,7 +493,7 @@ method forward*(pool: AdaptiveAvgPool2d, inputs: varargs[TensorRef]): TensorRef 
     raise newException(ModuleError,
       fmt"AdaptiveAvgPool2d expects 4D input (N,C,H,W), got {dims.len}D")
 
-  newTensorRef(newShape(dims[0], dims[1], pool.outputSize.h, pool.outputSize.w), input.dtype)
+  computeAdaptiveAvgPool2d(input, pool.outputSize.h, pool.outputSize.w)
 
 proc newAdaptiveAvgPool3d*(outputSize: int | tuple[d, h, w: int]): AdaptiveAvgPool3d =
   ## Create an AdaptiveAvgPool3d layer

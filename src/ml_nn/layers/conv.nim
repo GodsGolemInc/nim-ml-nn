@@ -6,6 +6,7 @@
 import std/[options, strformat, math]
 import ml_core
 import ../module
+import ../compute
 
 type
   PaddingMode* = enum
@@ -182,23 +183,15 @@ method forward*(conv: Conv1d, inputs: varargs[TensorRef]): TensorRef =
       fmt"Conv1d expects 2D or 3D input, got {dims.len}D")
 
   let hasBatch = dims.len == 3
-  let (batchSize, channels, length) =
-    if hasBatch: (dims[0], dims[1], dims[2])
-    else: (1, dims[0], dims[1])
+  let channels = if hasBatch: dims[1] else: dims[0]
 
   if channels != conv.inChannels:
     raise newException(ModuleError,
       fmt"Conv1d input channels mismatch: expected {conv.inChannels}, got {channels}")
 
-  let outLen = calcConv1dOutputSize(length, conv.kernelSize, conv.stride,
-                                     conv.padding, conv.dilation)
-
-  let outShape = if hasBatch:
-    newShape(batchSize, conv.outChannels, outLen)
-  else:
-    newShape(conv.outChannels, outLen)
-
-  newTensorRef(outShape, input.dtype)
+  let biasData = if conv.bias.isSome: conv.bias.get.data else: nil
+  computeConv1d(input, conv.weight.data, biasData,
+                conv.stride, conv.padding, conv.dilation, conv.groups)
 
 # =============================================================================
 # Conv2d Implementation
@@ -297,25 +290,18 @@ method forward*(conv: Conv2d, inputs: varargs[TensorRef]): TensorRef =
     raise newException(ModuleError,
       fmt"Conv2d expects 4D input (N,C,H,W), got {dims.len}D")
 
-  let batchSize = dims[0]
   let channels = dims[1]
-  let inH = dims[2]
-  let inW = dims[3]
 
   if channels != conv.inChannels:
     raise newException(ModuleError,
       fmt"Conv2d input channels mismatch: expected {conv.inChannels}, got {channels}")
 
-  let (outH, outW) = calcConv2dOutputSize(
-    inH, inW,
-    conv.kernelSize.h, conv.kernelSize.w,
-    conv.stride.h, conv.stride.w,
-    conv.padding.h, conv.padding.w,
-    conv.dilation.h, conv.dilation.w
-  )
-
-  let outShape = newShape(batchSize, conv.outChannels, outH, outW)
-  newTensorRef(outShape, input.dtype)
+  let biasData = if conv.bias.isSome: conv.bias.get.data else: nil
+  computeConv2d(input, conv.weight.data, biasData,
+                conv.stride.h, conv.stride.w,
+                conv.padding.h, conv.padding.w,
+                conv.dilation.h, conv.dilation.w,
+                conv.groups)
 
 # =============================================================================
 # ConvTranspose2d Implementation

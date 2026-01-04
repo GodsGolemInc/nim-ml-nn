@@ -6,6 +6,7 @@
 import std/[options, strformat]
 import ml_core
 import ../module
+import ../compute
 
 type
   # =============================================================================
@@ -241,8 +242,12 @@ method forward*(bn: BatchNorm2d, inputs: varargs[TensorRef]): TensorRef =
     raise newException(ModuleError,
       fmt"BatchNorm2d feature size mismatch: expected {bn.numFeatures}, got {dims[1]}")
 
-  # Output has same shape as input
-  newTensorRef(input.shape, input.dtype)
+  let gamma = if bn.weight.isSome: bn.weight.get.data else: nil
+  let beta = if bn.bias.isSome: bn.bias.get.data else: nil
+  let runMean = if bn.runningMean.isSome: bn.runningMean.get else: nil
+  let runVar = if bn.runningVar.isSome: bn.runningVar.get else: nil
+  computeBatchNorm2d(input, gamma, beta, runMean, runVar,
+                     bn.eps, bn.training, bn.momentum)
 
 # =============================================================================
 # BatchNorm3d Implementation
@@ -361,8 +366,9 @@ method forward*(ln: LayerNorm, inputs: varargs[TensorRef]): TensorRef =
       raise newException(ModuleError,
         fmt"LayerNorm shape mismatch at dim {i}: expected {normDim}, got {inputDim}")
 
-  # Output has same shape as input
-  newTensorRef(input.shape, input.dtype)
+  let gamma = if ln.weight.isSome: ln.weight.get.data else: nil
+  let beta = if ln.bias.isSome: ln.bias.get.data else: nil
+  computeLayerNorm(input, ln.normalizedShape, gamma, beta, ln.eps)
 
 # =============================================================================
 # GroupNorm Implementation
@@ -419,8 +425,9 @@ method forward*(gn: GroupNorm, inputs: varargs[TensorRef]): TensorRef =
     raise newException(ModuleError,
       fmt"GroupNorm channel mismatch: expected {gn.numChannels}, got {dims[1]}")
 
-  # Output has same shape as input
-  newTensorRef(input.shape, input.dtype)
+  let gamma = if gn.weight.isSome: gn.weight.get.data else: nil
+  let beta = if gn.bias.isSome: gn.bias.get.data else: nil
+  computeGroupNorm(input, gn.numGroups, gamma, beta, gn.eps)
 
 # =============================================================================
 # InstanceNorm1d Implementation
@@ -582,8 +589,8 @@ method forward*(rms: RMSNorm, inputs: varargs[TensorRef]): TensorRef =
       raise newException(ModuleError,
         fmt"RMSNorm shape mismatch at dim {i}: expected {normDim}, got {inputDim}")
 
-  # Output has same shape as input
-  newTensorRef(input.shape, input.dtype)
+  let gamma = if rms.weight.isSome: rms.weight.get.data else: nil
+  computeRmsNorm(input, rms.normalizedShape, gamma, rms.eps)
 
 # =============================================================================
 # LocalResponseNorm (LRN)

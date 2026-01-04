@@ -5,6 +5,7 @@
 import std/[strformat]
 import ml_core
 import ../module
+import ../compute
 
 type
   Dropout* = ref object of Module
@@ -71,12 +72,7 @@ method forward*(d: Dropout, inputs: varargs[TensorRef]): TensorRef =
   if not d.training or d.p == 0.0:
     return input
 
-  # During training with p=1, return zeros
-  if d.p == 1.0:
-    return newTensorRef(input.shape, input.dtype)
-
-  # Return tensor of same shape (actual dropout applied by executor)
-  newTensorRef(input.shape, input.dtype)
+  computeDropout(input, d.p, d.training)
 
 # Dropout1d
 

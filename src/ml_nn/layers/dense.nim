@@ -5,6 +5,7 @@
 import std/[options, strformat]
 import ml_core
 import ../module
+import ../compute
 
 type
   Linear* = ref object of Module
@@ -110,13 +111,9 @@ method forward*(l: Linear, inputs: varargs[TensorRef]): TensorRef =
     raise newException(ModuleError,
       fmt"Linear input size mismatch: expected {l.inFeatures}, got {lastDim}")
 
-  # Calculate output shape
-  var outputDims = inputDims
-  outputDims[^1] = l.outFeatures
-  let outputShape = newShape(outputDims)
-
-  # Return output TensorRef (actual computation would be in executor)
-  newTensorRef(outputShape, input.dtype)
+  # Compute actual result
+  let biasData = if l.bias.isSome: l.bias.get.data else: nil
+  computeLinear(input, l.weight.data, biasData)
 
 method reset*(l: Linear) =
   ## Reset parameters using Kaiming initialization

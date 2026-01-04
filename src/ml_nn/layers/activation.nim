@@ -5,6 +5,7 @@
 import std/[strformat]
 import ml_core
 import ../module
+import ../compute
 
 type
   ReLU* = ref object of Module
@@ -94,8 +95,7 @@ method forward*(r: ReLU, inputs: varargs[TensorRef]): TensorRef =
   ## Forward: max(0, x)
   if inputs.len == 0:
     return nil
-  # Output has same shape as input
-  newTensorRef(inputs[0].shape, inputs[0].dtype)
+  computeRelu(inputs[0])
 
 # LeakyReLU
 
@@ -110,7 +110,7 @@ method forward*(l: LeakyReLU, inputs: varargs[TensorRef]): TensorRef =
   ## Forward: max(negative_slope * x, x)
   if inputs.len == 0:
     return nil
-  newTensorRef(inputs[0].shape, inputs[0].dtype)
+  computeLeakyRelu(inputs[0], l.negativeSlope)
 
 # PReLU
 
@@ -174,7 +174,7 @@ method forward*(g: GELU, inputs: varargs[TensorRef]): TensorRef =
   ## Forward: x * Phi(x) where Phi is CDF of standard normal
   if inputs.len == 0:
     return nil
-  newTensorRef(inputs[0].shape, inputs[0].dtype)
+  computeGelu(inputs[0])
 
 # Sigmoid
 
@@ -187,7 +187,7 @@ method forward*(s: Sigmoid, inputs: varargs[TensorRef]): TensorRef =
   ## Forward: 1 / (1 + exp(-x))
   if inputs.len == 0:
     return nil
-  newTensorRef(inputs[0].shape, inputs[0].dtype)
+  computeSigmoid(inputs[0])
 
 # Tanh
 
@@ -200,7 +200,7 @@ method forward*(t: Tanh, inputs: varargs[TensorRef]): TensorRef =
   ## Forward: tanh(x)
   if inputs.len == 0:
     return nil
-  newTensorRef(inputs[0].shape, inputs[0].dtype)
+  computeTanh(inputs[0])
 
 # Softmax
 
@@ -217,7 +217,7 @@ method forward*(s: Softmax, inputs: varargs[TensorRef]): TensorRef =
   ## Forward: exp(x) / sum(exp(x)) along dim
   if inputs.len == 0:
     return nil
-  newTensorRef(inputs[0].shape, inputs[0].dtype)
+  computeSoftmax(inputs[0], s.dim)
 
 # LogSoftmax
 
@@ -322,7 +322,7 @@ method forward*(s: SiLU, inputs: varargs[TensorRef]): TensorRef =
   ## Forward: x * sigmoid(x)
   if inputs.len == 0:
     return nil
-  newTensorRef(inputs[0].shape, inputs[0].dtype)
+  computeSilu(inputs[0])
 
 # Mish
 
