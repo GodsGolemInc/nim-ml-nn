@@ -1,6 +1,6 @@
 # Package
 
-version       = "0.1.0"
+version       = "0.0.10"
 author        = "jasagiri"
 description   = "Neural network layers, loss functions, and optimizers"
 license       = "Apache-2.0"
