@@ -11,6 +11,7 @@
 ## v0.0.7: Convolution and pooling layers
 ## v0.0.8: Attention and Transformer components
 ## v0.0.9: Pruning utilities
+## v0.1.0: Kernel computation + Autograd integration
 
 import ml_nn/module
 import ml_nn/layers/dense
@@ -23,6 +24,9 @@ import ml_nn/layers/attention
 import ml_nn/loss
 import ml_nn/optim
 import ml_nn/utils/pruning
+import ml_nn/compute
+import ml_nn/autograd_compute
+import ml_nn/autograd_module
 
 export module
 export dense
@@ -35,3 +39,6 @@ export attention
 export loss
 export optim
 export pruning
+export compute
+export autograd_compute
+export autograd_module

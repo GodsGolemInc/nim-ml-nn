@@ -10,6 +10,7 @@ srcDir        = "src"
 
 requires "nim >= 2.0.0"
 requires "ml_core >= 0.0.6"
+requires "ml_autograd >= 0.0.1"
 
 # Tasks
 task test, "Run tests":
