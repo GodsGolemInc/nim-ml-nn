@@ -12,6 +12,7 @@
 ## v0.0.8: Attention and Transformer components
 ## v0.0.9: Pruning utilities
 ## v0.0.10: Kernel computation + Autograd integration
+## v0.0.11: Embedding layers (token, position, rotary)
 
 import ml_nn/module
 import ml_nn/layers/dense
@@ -21,6 +22,7 @@ import ml_nn/layers/norm
 import ml_nn/layers/conv
 import ml_nn/layers/pooling
 import ml_nn/layers/attention
+import ml_nn/layers/embedding
 import ml_nn/loss
 import ml_nn/optim
 import ml_nn/utils/pruning
@@ -36,6 +38,7 @@ export norm
 export conv
 export pooling
 export attention
+export embedding
 export loss
 export optim
 export pruning

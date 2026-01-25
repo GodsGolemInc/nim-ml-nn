@@ -1,6 +1,6 @@
 # Package
 
-version       = "0.0.10"
+version       = "0.0.11"
 author        = "jasagiri"
 description   = "Neural network layers, loss functions, and optimizers"
 license       = "Apache-2.0"
@@ -25,4 +25,5 @@ task test, "Run tests":
   exec "nim c -r --path:src --path:../nim-ml-core/src tests/test_pooling.nim"
   exec "nim c -r --path:src --path:../nim-ml-core/src tests/test_attention.nim"
   exec "nim c -r --path:src --path:../nim-ml-core/src tests/test_pruning.nim"
+  exec "nim c -r --path:src --path:../nim-ml-core/src tests/test_embedding.nim"
 
